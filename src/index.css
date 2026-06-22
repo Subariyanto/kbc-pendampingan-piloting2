@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors text-sm; }
+  .btn-primary { @apply btn bg-primary-700 text-white hover:bg-primary-800; }
+  .btn-secondary { @apply btn bg-white text-primary-700 border border-primary-200 hover:bg-primary-50; }
+  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+  .btn-ghost { @apply btn text-slate-700 hover:bg-slate-100; }
+  .input { @apply w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500; }
+  .label { @apply block text-sm font-medium text-slate-700 mb-1; }
+  .card { @apply bg-white rounded-xl shadow-sm border border-slate-200 p-5; }
+  .card-header { @apply flex items-center justify-between mb-4; }
+  .badge { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium; }
+  .badge-success { @apply badge bg-emerald-100 text-emerald-800; }
+  .badge-warn { @apply badge bg-amber-100 text-amber-800; }
+  .badge-danger { @apply badge bg-red-100 text-red-800; }
+  .badge-info { @apply badge bg-sky-100 text-sky-800; }
+  .badge-muted { @apply badge bg-slate-100 text-slate-700; }
+  .table-wrap { @apply overflow-x-auto rounded-lg border border-slate-200 bg-white; }
+  .table { @apply min-w-full text-sm; }
+  .table thead { @apply bg-slate-50 text-slate-700; }
+  .table th { @apply text-left px-4 py-2 font-semibold border-b border-slate-200; }
+  .table td { @apply px-4 py-2 border-b border-slate-100; }
+  .stat-card { @apply card flex items-center gap-4; }
+}
+
+@media print {
+  .no-print, aside, header.app-header { display: none !important; }
+  body { background: white; }
+  .print-page { padding: 0; margin: 0; }
+}
