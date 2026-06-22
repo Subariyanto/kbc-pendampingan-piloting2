@@ -50,8 +50,7 @@ export default function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="madrasah" element={<Madrasah />} />
             <Route path="users" element={<RoleGuard allow={['admin']}><Users /></RoleGuard>} />
-            <Route path="aktivasi-kode" element={<RoleGuard allow={['admin']}><KodeAktivasi /></RoleGuard>} />
-            <Route path="aktivasi" element={<RoleGuard allow={['admin']}><KodeAktivasi /></RoleGuard>} />
+            <Route path="kode-aktivasi" element={<RoleGuard allow={['admin']}><KodeAktivasi /></RoleGuard>} />
             <Route path="diagnosis" element={<Diagnosis />} />
             <Route path="rencana-aksi" element={<RencanaAksi />} />
             <Route path="pendampingan" element={<Pendampingan />} />

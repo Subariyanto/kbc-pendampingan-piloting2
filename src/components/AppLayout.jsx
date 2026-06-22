@@ -36,7 +36,7 @@ const adminMenu = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/madrasah', label: 'Data Madrasah Piloting', icon: School },
   { to: '/users', label: 'Manajemen User', icon: Users },
-  { to: '/aktivasi', label: 'Kode Aktivasi', icon: KeyRound },
+  { to: '/kode-aktivasi', label: 'Kode Aktivasi', icon: KeyRound },
   { to: '/diagnosis', label: 'Instrumen Diagnosis KBC', icon: ClipboardCheck },
   { to: '/rencana-aksi', label: 'Rencana Aksi KBC', icon: Target },
   { to: '/pendampingan', label: 'Pendampingan KBC', icon: HandHelping },
