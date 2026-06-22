@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   School,
@@ -34,51 +34,51 @@ import { ROLE_LABEL } from '../lib/constants';
 
 const adminMenu = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/madrasah', label: 'Data Madrasah Piloting', icon: School },
+  { to: '/madrasah', label: 'Data Madrasah', icon: School },
   { to: '/users', label: 'Manajemen User', icon: Users },
   { to: '/kode-aktivasi', label: 'Kode Aktivasi', icon: KeyRound },
-  { to: '/diagnosis', label: 'Instrumen Diagnosis KBC', icon: ClipboardCheck },
-  { to: '/rencana-aksi', label: 'Rencana Aksi KBC', icon: Target },
-  { to: '/pendampingan', label: 'Pendampingan KBC', icon: HandHelping },
+  { to: '/diagnosis', label: 'Diagnosis KBC', icon: ClipboardCheck },
+  { to: '/rencana-aksi', label: 'Rencana Aksi', icon: Target },
+  { to: '/pendampingan', label: 'Pendampingan', icon: HandHelping },
   { to: '/eviden', label: 'Upload Eviden', icon: Upload },
-  { to: '/monitoring', label: 'Monitoring & Skor', icon: TrendingUp },
+  { to: '/monitoring', label: 'Monitoring Skor', icon: TrendingUp },
   { to: '/laporan', label: 'Laporan', icon: FileText },
   { to: '/praktik-baik', label: 'Praktik Baik', icon: Sparkles },
-  { to: '/pengaturan', label: 'Pengaturan Supabase', icon: Settings },
+  { to: '/pengaturan', label: 'Pengaturan', icon: Settings },
 ];
 
 const pengawasMenu = [
-  { to: '/dashboard', label: 'Dashboard Pengawas', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/madrasah', label: 'Madrasah Binaan', icon: School },
-  { to: '/diagnosis', label: 'Diagnosis Awal KBC', icon: ClipboardCheck },
-  { to: '/rencana-aksi', label: 'Rencana Aksi KBC', icon: Target },
-  { to: '/pendampingan?tahap=intra', label: 'Pendampingan Intrakurikuler', icon: BookOpen },
-  { to: '/pendampingan?tahap=koku', label: 'Pendampingan Kokurikuler', icon: Activity },
-  { to: '/pendampingan?tahap=ekstra', label: 'Pendampingan Ekstrakurikuler', icon: Trophy },
-  { to: '/pendampingan?tahap=budaya', label: 'Budaya/Iklim Madrasah', icon: Trees },
+  { to: '/diagnosis', label: 'Diagnosis Awal', icon: ClipboardCheck },
+  { to: '/rencana-aksi', label: 'Rencana Aksi', icon: Target },
+  { to: '/pendampingan?tahap=intra', label: 'Intrakurikuler', icon: BookOpen, match: { path: '/pendampingan', query: { tahap: 'intra' } } },
+  { to: '/pendampingan?tahap=koku', label: 'Kokurikuler', icon: Activity, match: { path: '/pendampingan', query: { tahap: 'koku' } } },
+  { to: '/pendampingan?tahap=ekstra', label: 'Ekstrakurikuler', icon: Trophy, match: { path: '/pendampingan', query: { tahap: 'ekstra' } } },
+  { to: '/pendampingan?tahap=budaya', label: 'Budaya Madrasah', icon: Trees, match: { path: '/pendampingan', query: { tahap: 'budaya' } } },
   { to: '/eviden', label: 'Upload Eviden', icon: Upload },
   { to: '/monitoring', label: 'Monitoring Skor', icon: TrendingUp },
-  { to: '/rekomendasi', label: 'Rekomendasi Otomatis', icon: Lightbulb },
-  { to: '/laporan', label: 'Laporan Pendampingan', icon: FileText },
+  { to: '/rekomendasi', label: 'Rekomendasi', icon: Lightbulb },
+  { to: '/laporan', label: 'Laporan', icon: FileText },
 ];
 
 const kepalaMenu = [
-  { to: '/dashboard', label: 'Dashboard Madrasah', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/profil-madrasah', label: 'Profil Madrasah', icon: Building2 },
   { to: '/tim-kbc', label: 'Tim Inti KBC', icon: UserCheck },
   { to: '/rencana-aksi', label: 'Rencana Aksi', icon: Target },
   { to: '/eviden', label: 'Upload Eviden', icon: Upload },
-  { to: '/laporan', label: 'Laporan Implementasi', icon: FileText },
-  { to: '/rekomendasi', label: 'Rekomendasi Pengawas', icon: Lightbulb },
+  { to: '/laporan', label: 'Laporan', icon: FileText },
+  { to: '/rekomendasi', label: 'Rekomendasi', icon: Lightbulb },
 ];
 
 const guruMenu = [
-  { to: '/dashboard', label: 'Dashboard Guru', icon: LayoutDashboard },
-  { to: '/perangkat-ajar', label: 'Perangkat Ajar KBC', icon: GraduationCap },
-  { to: '/jurnal', label: 'Jurnal Implementasi', icon: PenSquare },
-  { to: '/refleksi', label: 'Refleksi Pembelajaran', icon: RotateCcw },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/perangkat-ajar', label: 'Perangkat Ajar', icon: GraduationCap },
+  { to: '/jurnal', label: 'Jurnal', icon: PenSquare },
+  { to: '/refleksi', label: 'Refleksi', icon: RotateCcw },
   { to: '/eviden', label: 'Upload Eviden', icon: Upload },
-  { to: '/rekomendasi', label: 'Catatan Rekomendasi', icon: Lightbulb },
+  { to: '/rekomendasi', label: 'Rekomendasi', icon: Lightbulb },
 ];
 
 function getMenu(role) {
@@ -98,8 +98,26 @@ export default function AppLayout() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const role = isAdmin ? 'admin' : profile?.role;
   const menu = getMenu(role);
+  const location = useLocation();
 
   useEffect(() => { setOpen(false); }, [profile?.id]);
+
+  // Close mobile drawer on navigation change
+  useEffect(() => { setOpen(false); }, [location.pathname, location.search]);
+
+  const isMenuActive = (m) => {
+    if (m.match) {
+      if (location.pathname !== m.match.path) return false;
+      const sp = new URLSearchParams(location.search);
+      return Object.entries(m.match.query || {}).every(([k, v]) => sp.get(k) === v);
+    }
+    // For routes that have submenus with ?tahap=xxx, only match exact (no query string)
+    if (m.to === '/pendampingan' && location.pathname === '/pendampingan') {
+      return !location.search;
+    }
+    if (m.to === '/dashboard') return location.pathname === '/dashboard';
+    return location.pathname === m.to || location.pathname.startsWith(m.to + '/');
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -129,24 +147,24 @@ export default function AppLayout() {
             <X size={18} />
           </button>
         </div>
-        <nav className="p-3 overflow-y-auto h-[calc(100vh-4rem)]">
-          {menu.map((m) => (
-            <NavLink
-              key={m.to}
-              to={m.to}
-              end={m.to === '/dashboard'}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm mb-0.5 transition-colors ${
-                  isActive
-                    ? 'bg-primary-700 text-white'
+        <nav className="p-2.5 overflow-y-auto h-[calc(100vh-4rem)]">
+          {menu.map((m) => {
+            const active = isMenuActive(m);
+            return (
+              <NavLink
+                key={m.to + m.label}
+                to={m.to}
+                className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] mb-0.5 transition-colors leading-tight ${
+                  active
+                    ? 'bg-primary-700 text-white font-medium'
                     : 'text-primary-100 hover:bg-primary-700/60'
-                }`
-              }
-            >
-              <m.icon size={18} className="shrink-0" />
-              <span className="truncate">{m.label}</span>
-            </NavLink>
-          ))}
+                }`}
+              >
+                <m.icon size={17} className="shrink-0" />
+                <span className="flex-1 min-w-0">{m.label}</span>
+              </NavLink>
+            );
+          })}
         </nav>
       </aside>
 
